@@ -1,6 +1,6 @@
 import MenuItem from "./Components/MenuItem"
 import OrderContents from "./Components/OrderContents"
-import OrderTotals from "./Components/orderTotals"
+import OrderTotals from "./Components/OrderTotals"
 import { menuItems } from "./data/db"
 import useOrder from "./hooks/useOrder"
 import TipPercentageForm from "./Components/TipPercentageForm"
