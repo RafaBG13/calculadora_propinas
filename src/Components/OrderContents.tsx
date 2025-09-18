@@ -1,12 +1,13 @@
-
+import type { ActionDispatch } from "react"
 import type { OrderItem } from "../types"
+import type { OrderActions } from "../reducers/order-reducer"
 
 type OrderContentsProps = {
   order: OrderItem[]
-  removeItem: (id: number) => void
+  dispatch: ActionDispatch<[action: OrderActions]>
 }
 
-export default function OrderContents({ order, removeItem }: OrderContentsProps) {
+export default function OrderContents({ order, dispatch }: OrderContentsProps) {
   return (
     <div>
       <h2 className="font-black text-4xl">Consumo</h2>
@@ -24,7 +25,7 @@ export default function OrderContents({ order, removeItem }: OrderContentsProps)
                   Cantidad: {item.quantity} - ${item.price * item.quantity}
                 </p>
               </div>
-              <button className="bg-red-600 h-8 w-8 rounded-full text-white font-black" onClick={() => removeItem(item.id)}>
+              <button className="bg-red-600 h-8 w-8 rounded-full text-white font-black" onClick={() => dispatch({type: 'remove-item', payload: {id: item.id}})}>
                 X
               </button>
             </div>

@@ -2,12 +2,13 @@ import MenuItem from "./Components/MenuItem"
 import OrderContents from "./Components/OrderContents"
 import OrderTotals from "./Components/OrderTotals"
 import { menuItems } from "./data/db"
-import useOrder from "./hooks/useOrder"
 import TipPercentageForm from "./Components/TipPercentageForm"
+import { useReducer } from "react"
+import { initialState, orderReducer } from "./reducers/order-reducer"
 
 function App() {
   // Desestructuramos del hook personalizado los estados y funciones que gestionan la orden
-  const { order, addItem, removeItem, tip, setTip, placeOrder } = useOrder()
+  const [state, dispatch] = useReducer(orderReducer,initialState)
 
   return (
     <>
@@ -27,7 +28,7 @@ function App() {
               <MenuItem
                 key={item.id} // clave única para que React optimice el renderizado
                 item={item} // el producto en sí
-                addItem={addItem} // función para agregarlo a la orden
+                dispatch = {dispatch} // función para agregarlo a la orden
               />
             ))}
           </div>
@@ -36,16 +37,16 @@ function App() {
         {/* COLUMNA DERECHA: Estado de la orden actual */}
         <div className="border border-dashed border-slate-300 p-5 rounded-xl space-y-10">
           {/* Si hay elementos en la orden, mostramos su contenido, el formulario de propina y los totales */}
-          {order.length ? (
+          {state.order.length ? (
             <>
               {/* Lista de ítems agregados + botón para eliminar */}
-              <OrderContents order={order} removeItem={removeItem} />
+              <OrderContents order={state.order} dispatch={dispatch} />
 
               {/* Radios para elegir porcentaje de propina */}
-              <TipPercentageForm setTip={setTip} tip={tip} />
+              <TipPercentageForm dispatch={dispatch} tip={state.tip} />
 
               {/* Subtotal, propina calculada y total, además del botón para "Guardar Orden" */}
-              <OrderTotals order={order} tip={tip} placeOrder={placeOrder} />
+              <OrderTotals order={state.order} tip={state.tip} dispatch={dispatch} />
             </>
           ) : (
             // Si la orden está vacía, mostramos un mensaje
